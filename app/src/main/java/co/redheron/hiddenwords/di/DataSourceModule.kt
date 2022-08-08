@@ -22,11 +22,6 @@ object DataSourceModule {
         return GameDataSQLiteDataSource(dbHelper)
     }
 
-    //    @Provides
-    //    @Singleton
-    //    WordDataSource provideWordDataSource(DbHelper dbHelper) {
-    //        return new WordSQLiteDataSource(dbHelper);
-    //    }
     @Provides
     @Singleton
     fun provideWordDataSource(@ApplicationContext context: Context): WordDataSource {

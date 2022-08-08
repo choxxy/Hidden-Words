@@ -247,7 +247,8 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
 
     private fun showAnsweredWordsCount(gameData: GameData) {
         binding.foundWordsCount.text = getString(
-            R.string.word_count, gameData.answeredWordsCount,
+            R.string.word_count,
+            gameData.answeredWordsCount,
             gameData.usedWords.size
         )
     }

@@ -9,7 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MainMenuViewModel @Inject constructor(private val mGameThemeRepository: GameThemeRepository) : ViewModel() {
+class MainMenuViewModel @Inject constructor(private val mGameThemeRepository: GameThemeRepository) :
+    ViewModel() {
 
     private val mOnGameThemeLoaded: MutableLiveData<List<GameTheme>> = MutableLiveData()
 

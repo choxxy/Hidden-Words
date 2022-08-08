@@ -55,7 +55,6 @@ class MainMenuActivity : FullscreenActivity() {
     }
 
     fun newGame(game: Game) {
-
         val mGameRoundDimVals = resources.getIntArray(R.array.game_round_dimension_values)
         val dim = mGameRoundDimVals[(Math.random() * mGameRoundDimVals.size).toInt()]
         val intent = Intent(this@MainMenuActivity, GamePlayActivity::class.java)

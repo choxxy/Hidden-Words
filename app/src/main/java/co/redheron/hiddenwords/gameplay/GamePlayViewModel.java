@@ -2,31 +2,26 @@ package co.redheron.hiddenwords.gameplay;
 
 import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import dagger.hilt.android.lifecycle.HiltViewModel;
 import co.redheron.hiddenwords.commons.SingleLiveEvent;
 import co.redheron.hiddenwords.commons.Timer;
+import co.redheron.hiddenwords.data.WordDataSource;
 import co.redheron.hiddenwords.data.entity.Game;
 import co.redheron.hiddenwords.data.entity.GameDataMapper;
-import co.redheron.hiddenwords.data.WordDataSource;
 import co.redheron.hiddenwords.data.entity.GameType;
 import co.redheron.hiddenwords.data.sqlite.GameDataSQLiteDataSource;
 import co.redheron.hiddenwords.model.GameData;
 import co.redheron.hiddenwords.model.UsedWord;
 import co.redheron.hiddenwords.model.Word;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import java.util.List;
+import javax.inject.Inject;
 
 
 @HiltViewModel
@@ -34,40 +29,53 @@ public class GamePlayViewModel extends ViewModel {
 
     private static final int TIMER_TIMEOUT = 1000;
 
-    static abstract class GameState {}
+    static abstract class GameState {
+    }
+
     static class Generating extends GameState {
         int rowCount;
         int colCount;
         String name;
+
         private Generating(int rowCount, int colCount, String name) {
             this.rowCount = rowCount;
             this.colCount = colCount;
             this.name = name;
         }
     }
+
     static class Loading extends GameState {
         int gid;
+
         private Loading(int gid) {
             this.gid = gid;
         }
     }
+
     static class Finished extends GameState {
         GameData mGameData;
+
         private Finished(GameData gameData) {
             this.mGameData = gameData;
         }
     }
+
     static class Paused extends GameState {
-        private Paused() {}
+        private Paused() {
+        }
     }
+
     static class Playing extends GameState {
         GameData mGameData;
+
         private Playing(GameData gameData) {
             this.mGameData = gameData;
         }
     }
+
     static class Update extends GameState {
         GameData mGameData;
+
         private Update(GameData gameData) {
             this.mGameData = gameData;
         }
@@ -76,6 +84,7 @@ public class GamePlayViewModel extends ViewModel {
     static class AnswerResult {
         public boolean correct;
         public int usedWordId;
+
         AnswerResult(boolean correct, int usedWordId) {
             this.correct = correct;
             this.usedWordId = usedWordId;
@@ -111,12 +120,13 @@ public class GamePlayViewModel extends ViewModel {
         resetLiveData();
     }
 
-    private void initCountDownTimer(long millisInFuture){
+    private void initCountDownTimer(long millisInFuture) {
         mCountDowntimer = new CountDownTimer(millisInFuture, TIMER_TIMEOUT) {
             @Override
             public void onTick(long millisUntilFinished) {
-                mOnTimer.setValue(millisUntilFinished/ 1000);
+                mOnTimer.setValue(millisUntilFinished / 1000);
             }
+
             @Override
             public void onFinish() {
 
@@ -162,7 +172,7 @@ public class GamePlayViewModel extends ViewModel {
         }
     }
 
-    private void startTimer(){
+    private void startTimer() {
         if (timeTrial)
             mCountDowntimer.start();
         else
@@ -174,22 +184,22 @@ public class GamePlayViewModel extends ViewModel {
         if (!(mCurrentState instanceof Generating)) {
             setGameState(new Generating(rowCount, colCount, "Play me"));
 
-            if(game.getType() == GameType.TIME_TRIAL) {
+            if (game.getType() == GameType.TIME_TRIAL) {
                 initCountDownTimer(300000);
                 timeTrial = true;
             }
 
             Observable.create((ObservableOnSubscribe<GameData>) emitter -> {
-                List<Word> wordList = mWordDataSource.getWords();
-                GameData gr = mGameDataCreator.newGameData(wordList, rowCount, colCount,game.getType(), "Play me");
-                long gid = mGameDataSource.saveGameData(new GameDataMapper().revMap(gr));
-                gr.setId((int) gid);
-                emitter.onNext(gr);
-                emitter.onComplete();
-            }).subscribeOn(Schedulers.computation())
+                        List<Word> wordList = mWordDataSource.getWords();
+                        GameData gr = mGameDataCreator.newGameData(wordList, rowCount, colCount, game.getType(), "Play me");
+                        long gid = mGameDataSource.saveGameData(new GameDataMapper().revMap(gr));
+                        gr.setId((int) gid);
+                        emitter.onNext(gr);
+                        emitter.onComplete();
+                    }).subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(gameRound -> {
-                        mCurrentDuration  = 0;
+                        mCurrentDuration = 0;
                         startTimer();
                         mCurrentGameData = gameRound;
                         setGameState(new Playing(mCurrentGameData));
@@ -210,7 +220,7 @@ public class GamePlayViewModel extends ViewModel {
 
             if (mCurrentGameData.isFinished()) {
                 setGameState(new Finished(mCurrentGameData));
-                if(timeTrial)
+                if (timeTrial)
                     mCountDowntimer.cancel();
                 else
                     mTimer.stop();
