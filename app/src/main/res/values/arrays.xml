@@ -19,7 +19,7 @@
         <item>Time Trial</item>
         <item>Hidden Letters</item>
         <item>Blind Fold</item>
-        <item>Questions Game</item>
+<!--        <item>Questions Game</item>-->
     </string-array>
 
     <string-array name="menu_colors">
