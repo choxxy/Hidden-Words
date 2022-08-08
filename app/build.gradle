@@ -11,30 +11,30 @@ apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 android {
 
-    def keystoreProperties = new Properties()
-    def keystorePropertiesFile = rootProject.file('key.properties')
-    if (keystorePropertiesFile.exists()) {
-        // when building locally, use signing properties from key.properties
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    } else {
-        // add check to enable local build
-        if (System.getenv('KEY_STORE_PATH') != null) {
-            // when building CI server, use signing properties from environment variables
-            keystoreProperties.setProperty('storePassword', System.getenv('STORE_PASSWORD'))
-            keystoreProperties.setProperty('keyPassword', System.getenv('KEY_PASSWORD'))
-            keystoreProperties.setProperty('keyAlias', System.getenv('KEY_ALIAS'))
-            keystoreProperties.setProperty('storeFile', System.getenv('KEY_STORE_PATH'))
-        }
-    }
+//    def keystoreProperties = new Properties()
+//    def keystorePropertiesFile = rootProject.file('key.properties')
+//    if (keystorePropertiesFile.exists()) {
+//        // when building locally, use signing properties from key.properties
+//        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+//    } else {
+//        // add check to enable local build
+//        if (System.getenv('KEY_STORE_PATH') != null) {
+//            // when building CI server, use signing properties from environment variables
+//            keystoreProperties.setProperty('storePassword', System.getenv('STORE_PASSWORD'))
+//            keystoreProperties.setProperty('keyPassword', System.getenv('KEY_PASSWORD'))
+//            keystoreProperties.setProperty('keyAlias', System.getenv('KEY_ALIAS'))
+//            keystoreProperties.setProperty('storeFile', System.getenv('KEY_STORE_PATH'))
+//        }
+//    }
 
     compileSdk 31
 
     defaultConfig {
-        applicationId "co.africanwolf.hiddenwords"
+        applicationId "co.redheron.hiddenwords"
         minSdk 24
         targetSdk 31
-        versionCode 3
-        versionName "3.0"
+        versionCode 4
+        versionName "4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -42,27 +42,27 @@ android {
         viewBinding true
     }
 
-    signingConfigs {
-        release {
-            if (keystoreProperties.getProperty("storeFile") != null) {
-                storePassword keystoreProperties['storePassword']
-                keyPassword keystoreProperties['keyPassword']
-                keyAlias keystoreProperties['keyAlias']
-                storeFile file(keystoreProperties['storeFile'])
-            }
-            v2SigningEnabled true
-        }
-    }
+//    signingConfigs {
+//        release {
+//            if (keystoreProperties.getProperty("storeFile") != null) {
+//                storePassword keystoreProperties['storePassword']
+//                keyPassword keystoreProperties['keyPassword']
+//                keyAlias keystoreProperties['keyAlias']
+//                storeFile file(keystoreProperties['storeFile'])
+//            }
+//            v2SigningEnabled true
+//        }
+//    }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            firebaseAppDistribution {
-                releaseNotes = ""
-                testers = "jorh.choxxy@gmail.com"
-            }
+//            signingConfig signingConfigs.release
+//            firebaseAppDistribution {
+//                releaseNotes = ""
+//                testers = "jorh.choxxy@gmail.com"
+//            }
         }
 
         debug {
@@ -75,15 +75,15 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.6.1'
 
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-perf'
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -92,7 +92,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.github.abdularis:CircularImageView:v1.2'
+    implementation 'com.github.abdularis:CircularImageView:1.5'
     testImplementation 'junit:junit:4.13.2'
 
     // extensions
@@ -100,8 +100,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation "com.google.dagger:hilt-android:2.42"
+    kapt "com.google.dagger:hilt-compiler:2.42"
 
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.2'
 

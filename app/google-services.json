@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "757197087612",
-    "project_id": "word-search-puzzle-3abf3",
-    "storage_bucket": "word-search-puzzle-3abf3.appspot.com"
+    "project_number": "55089045000",
+    "project_id": "word-search-puzzle-ddd30",
+    "storage_bucket": "word-search-puzzle-ddd30.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:757197087612:android:87684ea648a3dd685c7af9",
+        "mobilesdk_app_id": "1:55089045000:android:81584c24e08e2008cdbbbd",
         "android_client_info": {
-          "package_name": "co.africanwolf.hiddenwords"
+          "package_name": "co.redheron.hiddenwords"
         }
       },
       "oauth_client": [
         {
-          "client_id": "757197087612-uhi4r9bmf7srtqv2ukfjc55h17bf45rg.apps.googleusercontent.com",
+          "client_id": "55089045000-u5hdqu6gvhlbr53j791rn8e5hq534d2v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCkCQpQ0YBXJaW2Dyg9rUCUzGruubgHYWc"
+          "current_key": "AIzaSyBHzG2wjyNT-lGjhKlpJ0CrkXG1LHbnw70"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "757197087612-uhi4r9bmf7srtqv2ukfjc55h17bf45rg.apps.googleusercontent.com",
+              "client_id": "55089045000-u5hdqu6gvhlbr53j791rn8e5hq534d2v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
