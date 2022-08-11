@@ -5,5 +5,5 @@ enum class GameType(val type: String) {
     TIME_TRIAL("Time Trial"),
     HIDDEN_LETTERS("Hidden Letters"),
     BLIND_FOLD("Blind Fold"),
-    QUESTIONS_GAME("Questions Game")
+//    QUESTIONS_GAME("Questions Game")
 }
