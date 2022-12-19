@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "55089045000-ajbuj6fmh8pl9pcpn8qul698lvqlo7vo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.redheron.hiddenwords",
+            "certificate_hash": "a2a94a9989c6f0bbbefbf52d3f5b5ba44d24f3d4"
+          }
+        },
+        {
           "client_id": "55089045000-u5hdqu6gvhlbr53j791rn8e5hq534d2v.apps.googleusercontent.com",
           "client_type": 3
         }
