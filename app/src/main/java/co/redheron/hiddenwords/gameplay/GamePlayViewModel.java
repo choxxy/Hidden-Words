@@ -2,9 +2,11 @@ package co.redheron.hiddenwords.gameplay;
 
 import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import co.redheron.hiddenwords.commons.SingleLiveEvent;
 import co.redheron.hiddenwords.commons.Timer;
 import co.redheron.hiddenwords.data.WordDataSource;
@@ -20,7 +22,9 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
 import java.util.List;
+
 import javax.inject.Inject;
 
 
@@ -56,6 +60,14 @@ public class GamePlayViewModel extends ViewModel {
         GameData mGameData;
 
         private Finished(GameData gameData) {
+            this.mGameData = gameData;
+        }
+    }
+
+    static class TimeOut extends GameState {
+        GameData mGameData;
+
+        private TimeOut(GameData gameData) {
             this.mGameData = gameData;
         }
     }
@@ -129,7 +141,7 @@ public class GamePlayViewModel extends ViewModel {
 
             @Override
             public void onFinish() {
-
+                setGameState(new TimeOut(mCurrentGameData));
             }
         };
     }
@@ -185,7 +197,7 @@ public class GamePlayViewModel extends ViewModel {
             setGameState(new Generating(rowCount, colCount, "Play me"));
 
             if (game.getType() == GameType.TIME_TRIAL) {
-                initCountDownTimer(300000);
+                initCountDownTimer(30000);
                 timeTrial = true;
             }
 

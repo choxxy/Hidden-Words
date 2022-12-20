@@ -1,5 +1,7 @@
 package co.redheron.hiddenwords.model;
 
+import java.util.Arrays;
+
 /**
  * Created by abdularis on 08/07/17.
  */
@@ -8,9 +10,9 @@ public class Grid {
     public static final char GRID_NEWLINE_SEPARATOR = ',';
     public static final char NULL_CHAR = '\0';
 
-    private char mArray[][];
+    private final char[][] mArray;
 
-    public Grid(char grid[][]) {
+    public Grid(char[][] grid) {
         mArray = grid;
     }
 
@@ -42,10 +44,8 @@ public class Grid {
     }
 
     public void reset() {
-        for (int i = 0; i < mArray.length; i++) {
-            for (int j = 0; j < mArray[i].length; j++) {
-                mArray[i][j] = NULL_CHAR;
-            }
+        for (char[] chars : mArray) {
+            Arrays.fill(chars, NULL_CHAR);
         }
     }
 

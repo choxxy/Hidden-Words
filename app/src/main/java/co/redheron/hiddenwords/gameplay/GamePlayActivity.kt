@@ -6,10 +6,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
-import android.view.View.GONE
 import android.widget.TextView
 import androidx.activity.viewModels
 import co.redheron.hiddenwords.FullscreenActivity
@@ -23,9 +23,9 @@ import co.redheron.hiddenwords.custom.StreakView.StreakLine
 import co.redheron.hiddenwords.data.entity.Game
 import co.redheron.hiddenwords.data.entity.GameType
 import co.redheron.hiddenwords.databinding.ActivityGamePlayBinding
+import co.redheron.hiddenwords.gameover.ACTION_MAIN_MENU
 import co.redheron.hiddenwords.gameover.GameOverDialog
-import co.redheron.hiddenwords.gameover.GameOverDialog.Companion.newInstance
-import co.redheron.hiddenwords.gameover.GameOverDialog.GameOverDialogInputListener
+import co.redheron.hiddenwords.gameover.GameTimedOutDialog
 import co.redheron.hiddenwords.mainmenu.MainMenuActivity
 import co.redheron.hiddenwords.model.GameData
 import co.redheron.hiddenwords.model.UsedWord
@@ -34,7 +34,7 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
+class GamePlayActivity : FullscreenActivity() {
 
     @Inject
     lateinit var mSoundPlayer: SoundPlayer
@@ -115,7 +115,7 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
 
     private fun updateUI() {
         if (game.type == GameType.BLIND_FOLD) {
-            binding.flowLayout.visibility = GONE
+            binding.flowLayout.visibility = View.GONE
         }
 
         binding.gameType.text = game.type.type
@@ -161,18 +161,26 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
 
     private fun onGameStateChanged(gameState: GamePlayViewModel.GameState) {
         showLoading(false, null)
-        if (gameState is GamePlayViewModel.Generating) {
-            val state = gameState
-            val text = "Generating " + state.rowCount + "x" + state.colCount + " grid"
-            showLoading(true, text)
-            refresh()
-        } else if (gameState is GamePlayViewModel.Finished) {
-            showFinishGame(gameState.mGameData.id)
-        } else if (gameState is GamePlayViewModel.Paused) {
-        } else if (gameState is GamePlayViewModel.Playing) {
-            onGameRoundLoaded(gameState.mGameData)
-        } else if (gameState is GamePlayViewModel.Update) {
-            showAnsweredWordsCount(gameState.mGameData)
+        when (gameState) {
+            is GamePlayViewModel.Generating -> {
+                val text = "Generating " + gameState.rowCount + "x" + gameState.colCount + " grid"
+                showLoading(true, text)
+                refresh()
+            }
+            is GamePlayViewModel.Finished -> {
+                showGameOverDialog(gameState.mGameData.id)
+            }
+            is GamePlayViewModel.TimeOut -> {
+                showTimeOutDialog(gameState.mGameData.id)
+            }
+            is GamePlayViewModel.Paused -> {
+            }
+            is GamePlayViewModel.Playing -> {
+                onGameRoundLoaded(gameState.mGameData)
+            }
+            is GamePlayViewModel.Update -> {
+                showAnsweredWordsCount(gameState.mGameData)
+            }
         }
     }
 
@@ -208,7 +216,7 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
 
     private fun doneLoadingContent() {
         // call tryScale() on the next render frame
-        Handler().postDelayed({ tryScale() }, 100)
+        Handler(Looper.getMainLooper()).postDelayed({ tryScale() }, 100)
     }
 
     private fun showLoading(enable: Boolean, text: String?) {
@@ -257,10 +265,20 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
         binding.foundWordsCount.text = getString(R.string.word_count, 0, count)
     }
 
-    private fun showFinishGame(gameId: Int) {
+    private fun showGameOverDialog(gameId: Int) {
         val fm = supportFragmentManager
-        val editNameDialogFragment = newInstance("Some Title")
-        editNameDialogFragment.show(fm, "fragment_edit_name")
+        val gameOverDialog = GameOverDialog(gameId) { response ->
+            handleDialogResponse(response)
+        }
+        gameOverDialog.show(fm, "fragment_edit_name")
+    }
+
+    private fun showTimeOutDialog(gameId: Int) {
+        val fm = supportFragmentManager
+        val gameOverDialog = GameTimedOutDialog(gameId) { response ->
+            handleDialogResponse(response)
+        }
+        gameOverDialog.show(fm, "fragment_edit_name")
     }
 
     private fun setGameAsAlreadyFinished() {
@@ -294,7 +312,7 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
                     }
                 }
             }
-            tv.text = "$str "
+            tv.text = str
         }
         tv.setTextColor(Color.WHITE)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
@@ -306,15 +324,15 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
         for (i in 0 until binding.flowLayout.childCount) {
             val tv = binding.flowLayout.getChildAt(i) as TextView
             val uw = tv.tag as UsedWord
-            if (uw != null && uw.id == usedWordId) {
+            if (uw.id == usedWordId) {
                 return tv
             }
         }
         return null
     }
 
-    override fun sendInput(input: String?) {
-        if (input == GameOverDialog.ACTION_MAIN_MENU) {
+    private fun handleDialogResponse(input: String?) {
+        if (input == ACTION_MAIN_MENU) {
             val intent = Intent(this, MainMenuActivity::class.java)
             startActivity(intent)
             finish()

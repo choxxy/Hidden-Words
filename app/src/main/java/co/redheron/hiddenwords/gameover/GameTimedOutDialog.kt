@@ -1,9 +1,7 @@
 package co.redheron.hiddenwords.gameover
 
-import android.content.Context
 import android.graphics.Point
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,22 +10,14 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import co.redheron.hiddenwords.R
-import co.redheron.hiddenwords.commons.DurationFormatter
 import co.redheron.hiddenwords.databinding.ViewGameTimeoutDialogBinding
 import co.redheron.hiddenwords.model.GameDataInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GameTimedOutDialog : DialogFragment() {
+class GameTimedOutDialog(private val gameId: Int, private val dialogCallback: (String) -> Unit) : DialogFragment() {
     private var binding: ViewGameTimeoutDialogBinding? = null
-    private var mGameId: Int = 0
-    var onInputListener: GameOverDialogInputListener? = null
     private val mViewModel: GameOverViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mGameId = requireArguments().getInt(GameOverActivity.EXTRA_GAME_ROUND_ID)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,12 +27,12 @@ class GameTimedOutDialog : DialogFragment() {
         binding = ViewGameTimeoutDialogBinding.inflate(inflater, container, false)
 
         binding?.next?.setOnClickListener {
-            onInputListener?.sendInput(ACTION_NEXT_GAME)
+            dialogCallback(ACTION_NEXT_GAME)
             dismiss()
         }
 
         binding?.mainMenu?.setOnClickListener {
-            onInputListener?.sendInput(ACTION_MAIN_MENU)
+            dialogCallback(ACTION_MAIN_MENU)
             dismiss()
         }
 
@@ -52,17 +42,11 @@ class GameTimedOutDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.loadData(mGameId)
+        mViewModel.loadData(gameId)
         mViewModel.onGameDataInfoLoaded.observe(this) { info: GameDataInfo -> showGameStat(info) }
     }
 
-    private fun showGameStat(info: GameDataInfo) {
-        binding?.message?.text = getString(
-            R.string.finish_text,
-            info.usedWordsCount,
-            DurationFormatter.fromInteger(info.duration.toLong())
-        )
-    }
+    private fun showGameStat(info: GameDataInfo) {}
 
     override fun getTheme(): Int {
         return R.style.RoundedCornersDialog
@@ -80,33 +64,5 @@ class GameTimedOutDialog : DialogFragment() {
         window.setGravity(Gravity.CENTER)
         // Call super onResume after sizing
         super.onResume()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            onInputListener = activity as GameOverDialogInputListener?
-        } catch (e: ClassCastException) {
-            Log.e(TAG, "onAttach: " + e.message)
-        }
-    }
-
-    interface GameOverDialogInputListener {
-        fun sendInput(input: String?)
-    }
-
-    companion object {
-        private val TAG = GameTimedOutDialog::class.java.simpleName
-        const val ACTION_NEXT_GAME = "next_game"
-        const val ACTION_MAIN_MENU = "main_menu"
-
-        @JvmStatic
-        fun newInstance(title: String?): GameTimedOutDialog {
-            val frag = GameTimedOutDialog()
-            val args = Bundle()
-            args.putString("title", title)
-            frag.arguments = args
-            return frag
-        }
     }
 }

@@ -18,16 +18,11 @@ import co.redheron.hiddenwords.model.GameDataInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GameOverDialog : DialogFragment() {
+class GameOverDialog(private val gameId: Int, private val dialogCallback: (String) -> Unit) :
+    DialogFragment() {
     private var binding: ViewGameEndDialogBinding? = null
-    private var mGameId: Int = 0
     var onInputListener: GameOverDialogInputListener? = null
     private val mViewModel: GameOverViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mGameId = requireArguments().getInt(GameOverActivity.EXTRA_GAME_ROUND_ID)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,12 +32,12 @@ class GameOverDialog : DialogFragment() {
         binding = ViewGameEndDialogBinding.inflate(inflater, container, false)
 
         binding?.next?.setOnClickListener {
-            onInputListener?.sendInput(ACTION_NEXT_GAME)
+            dialogCallback(ACTION_NEXT_GAME)
             dismiss()
         }
 
         binding?.mainMenu?.setOnClickListener {
-            onInputListener?.sendInput(ACTION_MAIN_MENU)
+            dialogCallback(ACTION_MAIN_MENU)
             dismiss()
         }
 
@@ -52,7 +47,7 @@ class GameOverDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.loadData(mGameId)
+        mViewModel.loadData(gameId)
         mViewModel.onGameDataInfoLoaded.observe(this) { info: GameDataInfo -> showGameStat(info) }
     }
 
@@ -97,16 +92,5 @@ class GameOverDialog : DialogFragment() {
 
     companion object {
         private val TAG = GameOverDialog::class.java.simpleName
-        const val ACTION_NEXT_GAME = "next_game"
-        const val ACTION_MAIN_MENU = "main_menu"
-
-        @JvmStatic
-        fun newInstance(title: String?): GameOverDialog {
-            val frag = GameOverDialog()
-            val args = Bundle()
-            args.putString("title", title)
-            frag.arguments = args
-            return frag
-        }
     }
 }
