@@ -41,5 +41,7 @@
     <string name="next_puzzle">Next Puzzle</string>
     <string name="hidden_words">Hidden Words</string>
     <string name="version_1_0">version 1.0</string>
+    <string name="time_out">Time Out!</string>
+    <string name="ran_out_of_time">Unfortunately, you ran out of time.</string>
 
 </resources>

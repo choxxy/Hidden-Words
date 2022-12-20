@@ -23,9 +23,9 @@ import co.redheron.hiddenwords.custom.StreakView.StreakLine
 import co.redheron.hiddenwords.data.entity.Game
 import co.redheron.hiddenwords.data.entity.GameType
 import co.redheron.hiddenwords.databinding.ActivityGamePlayBinding
-import co.redheron.hiddenwords.gameover.GameoverDialog
-import co.redheron.hiddenwords.gameover.GameoverDialog.Companion.newInstance
-import co.redheron.hiddenwords.gameover.GameoverDialog.GameOverDialogInputListener
+import co.redheron.hiddenwords.gameover.GameOverDialog
+import co.redheron.hiddenwords.gameover.GameOverDialog.Companion.newInstance
+import co.redheron.hiddenwords.gameover.GameOverDialog.GameOverDialogInputListener
 import co.redheron.hiddenwords.mainmenu.MainMenuActivity
 import co.redheron.hiddenwords.model.GameData
 import co.redheron.hiddenwords.model.UsedWord
@@ -258,10 +258,6 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
     }
 
     private fun showFinishGame(gameId: Int) {
-        /*    Intent intent = new Intent(this, GameOverActivity.class);
-        intent.putExtra(GameOverActivity.EXTRA_GAME_ROUND_ID, gameId);
-        startActivity(intent);
-        finish();*/
         val fm = supportFragmentManager
         val editNameDialogFragment = newInstance("Some Title")
         editNameDialogFragment.show(fm, "fragment_edit_name")
@@ -318,7 +314,7 @@ class GamePlayActivity : FullscreenActivity(), GameOverDialogInputListener {
     }
 
     override fun sendInput(input: String?) {
-        if (input == GameoverDialog.ACTION_MAIN_MENU) {
+        if (input == GameOverDialog.ACTION_MAIN_MENU) {
             val intent = Intent(this, MainMenuActivity::class.java)
             startActivity(intent)
             finish()

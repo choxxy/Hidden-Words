@@ -3,7 +3,6 @@ package co.redheron.hiddenwords.mainmenu
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.redheron.hiddenwords.FullscreenActivity
 import co.redheron.hiddenwords.R
@@ -24,7 +23,6 @@ class MainMenuActivity : FullscreenActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

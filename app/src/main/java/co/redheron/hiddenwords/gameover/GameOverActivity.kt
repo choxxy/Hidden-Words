@@ -46,7 +46,7 @@ class GameOverActivity : FullscreenActivity() {
         finish()
     }
 
-    fun showGameStat(info: GameDataInfo) {
+    private fun showGameStat(info: GameDataInfo) {
         val strGridSize = info.gridRowCount.toString() + " x " + info.gridColCount
         var str = getString(R.string.finish_text)
         str = str.replace(":gridSize".toRegex(), strGridSize)

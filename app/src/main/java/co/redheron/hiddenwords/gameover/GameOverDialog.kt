@@ -18,7 +18,7 @@ import co.redheron.hiddenwords.model.GameDataInfo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GameoverDialog : DialogFragment() {
+class GameOverDialog : DialogFragment() {
     private var binding: ViewGameEndDialogBinding? = null
     private var mGameId: Int = 0
     var onInputListener: GameOverDialogInputListener? = null
@@ -58,7 +58,8 @@ class GameoverDialog : DialogFragment() {
 
     private fun showGameStat(info: GameDataInfo) {
         binding?.message?.text = getString(
-            R.string.finish_text, info.usedWordsCount,
+            R.string.finish_text,
+            info.usedWordsCount,
             DurationFormatter.fromInteger(info.duration.toLong())
         )
     }
@@ -95,13 +96,13 @@ class GameoverDialog : DialogFragment() {
     }
 
     companion object {
-        private val TAG = GameoverDialog::class.java.simpleName
+        private val TAG = GameOverDialog::class.java.simpleName
         const val ACTION_NEXT_GAME = "next_game"
         const val ACTION_MAIN_MENU = "main_menu"
 
         @JvmStatic
-        fun newInstance(title: String?): GameoverDialog {
-            val frag = GameoverDialog()
+        fun newInstance(title: String?): GameOverDialog {
+            val frag = GameOverDialog()
             val args = Bundle()
             args.putString("title", title)
             frag.arguments = args
