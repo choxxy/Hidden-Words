@@ -197,7 +197,7 @@ public class GamePlayViewModel extends ViewModel {
             setGameState(new Generating(rowCount, colCount, "Play me"));
 
             if (game.getType() == GameType.TIME_TRIAL) {
-                initCountDownTimer(30000);
+                initCountDownTimer(game.getGameLevel().getTimeLimitInMillis());
                 timeTrial = true;
             }
 

@@ -2,12 +2,21 @@ package co.africanwolf.hiddenwords.data.entity
 
 import kotlinx.serialization.Serializable
 
+enum class GameLevel(val levelName: String, val timeLimitInMillis: Long) {
+    EASY("Easy", 300_000),
+    MEDIUM("Medium", 270_000),
+    HARD("Hard", 240_000),
+    PRO("Pro", 180_000);
+}
+
 @Serializable
+
 data class Game(
     var id: Int,
     var type: GameType,
     var color: String,
-    var levels: Int = 100,
+    var gameLevel: GameLevel = GameLevel.EASY,
+    var levels: Int = 100
 )
 
 @Serializable
@@ -21,5 +30,5 @@ data class Player(
 @Serializable
 data class GameProgress(
     var gameId: Int,
-    var curLevels: Int,
+    var curLevels: Int
 )

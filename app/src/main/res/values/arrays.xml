@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="game_round_dimensions">
+    <string-array name="game_grid_sizes">
         <item>4 x 4</item>
         <item>6 x 6</item>
-        <item>8 x 8</item>
         <item>10 x 10</item>
+        <item>12 x 12</item>
     </string-array>
-    <integer-array name="game_round_dimension_values">
+    <integer-array name="game_grid_size_values">
         <item>4</item>
         <item>6</item>
-        <item>8</item>
         <item>10</item>
+        <item>12</item>
     </integer-array>
 
     <string-array name="game_modes">
