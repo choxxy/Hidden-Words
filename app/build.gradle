@@ -97,7 +97,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     // extensions
-    implementation "androidx.fragment:fragment-ktx:1.5.7"
+    implementation "androidx.fragment:fragment-ktx:1.8.2"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
